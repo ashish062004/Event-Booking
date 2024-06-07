@@ -85,26 +85,34 @@ export default function Header() {
                   Contact
                 </NavLink>
               </li>
-              {isSignin ? (
-                <li>
-                  <button className="bg-red-500" onClick={handleSignOut}>
-                    Sign Out
-                  </button>
-                </li>
-              ) : (
-                <li>
-                  <NavLink
-                    to="/signup"
-                    className={({ isActive }) =>
-                      `block py-2 pr-4 pl-3 duration-200 ${
-                        isActive ? 'text-orange-700' : 'text-gray-700'
-                      } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
-                    }
-                  >
-                    <button className="bg-blue-500">Sign Up</button>
-                  </NavLink>
-                </li>
-              )}
+              {isSignin? (
+  <li>
+    <button 
+      className="bg-red-500 hover:bg-red-600 text-white font-semibold py-2 px-4 rounded transition duration-150 ease-in-out" 
+      onClick={handleSignOut}
+    >
+      Sign Out
+    </button>
+  </li>
+) : (
+  <li>
+    <NavLink
+      to="/signup"
+      className={({ isActive }) =>
+        `block py-2 pr-4 pl-3 duration-200 ${
+          isActive? 'text-orange-700' : 'text-gray-700'
+        } border-b border-gray-100 hover:bg-gray-50 lg:hover:bg-transparent lg:border-0 hover:text-orange-700 lg:p-0`
+      }
+    >
+      <button 
+        className="bg-blue-500 hover:bg-blue-600 text-white font-semibold py-2 px-4 rounded transition duration-150 ease-in-out"
+      >
+        Sign Up
+      </button>
+    </NavLink>
+  </li>
+)}
+
             </ul>
           </div>
         </div>

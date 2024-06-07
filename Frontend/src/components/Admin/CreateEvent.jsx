@@ -1,6 +1,7 @@
 //admin can create event
 import React, { useState } from 'react';
 import { api } from '../../api';
+import { useNavigate } from 'react-router-dom'; 
 
 export default function CreateEvent() {
     
@@ -15,6 +16,8 @@ export default function CreateEvent() {
         sponsor: '',
     });
     
+    const navigate = useNavigate();
+
     const handleChange = (e) => {
         setEvent({ ...event, [e.target.name]: e.target.value });
     };
@@ -25,7 +28,7 @@ export default function CreateEvent() {
             const response = await api.post('/admin/events', event);
             if (response.status === 200) {
                 alert('Event created successfully');
-                window.location.href = '/admin/events';
+                navigate('/events'); 
             } else {
                 alert('Event creation failed');
             }

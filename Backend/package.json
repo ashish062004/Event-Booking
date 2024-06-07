@@ -4,7 +4,7 @@
   "description": "this is event B\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[D\u001b[E\u001b[C\u001b[C\u001b[C\u001b[C\u001b[C\u001b[Cooking Web App",
   "main": "index.js",
   "scripts": {
-    "dev": "nodemon index.js src/utils/generateTemplate.js"
+    "dev": "nodemon index.js"
   },
   "author": "Ashish",
   "license": "ISC",
