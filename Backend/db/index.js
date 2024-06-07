@@ -1,7 +1,9 @@
-const e = require('express');
+const express = require('express');
 const mongoose = require('mongoose');
+const dotenv = require('dotenv');
+dotenv.config();
 
-mongoose.connect('mongodb+srv://ashishYadav:Aay%4013062004@cluster.4koiemy.mongodb.net/eventBooking');
+mongoose.connect(process.env.DB_URI);
 
 const AdminSchema = new mongoose.Schema({
     username: String,

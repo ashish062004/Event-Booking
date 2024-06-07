@@ -11,6 +11,7 @@ import Signup from './components/Auth/Signup.jsx';
 import Signin from './components/Auth/Signin.jsx';
 import EventList from './components/Event/EventList.jsx';
 import EventDetails from './components/Event/EventDetails.jsx';
+import CreateEvent from './components/Admin/CreateEvent.jsx';
 import { AuthProvider } from './context/AuthContext'; // Import AuthProvider
 
 ReactDOM.createRoot(document.getElementById('root')).render(
@@ -24,6 +25,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
             <Route path="contact" element={<Contact />} />
             <Route path="/signup" element={<Signup />} />
             <Route path="/signin" element={<Signin />} />
+            <Route path="/admin/events" element={<CreateEvent />} />
             <Route path="/events" element={<EventList />} />
             <Route path="/event/:id" element={<EventDetails />} />
           </Route>

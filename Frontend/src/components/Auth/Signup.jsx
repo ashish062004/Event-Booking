@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Link } from 'react-router-dom';
-import { useAuth } from '../../context/AuthContext.jsx'
+import { Link, useNavigate } from 'react-router-dom';
+import { useAuth } from '../../context/AuthContext.jsx';
 import { api } from '../../api.js';
 
 export default function Signup() {
@@ -8,28 +8,29 @@ export default function Signup() {
     const [password, setPassword] = useState('');
     const [email, setEmail] = useState('');
     const [phone, setPhone] = useState('');
-    const [role, setrole] = useState('user');
-    const { setRole } = useAuth();
+    const [role, setRole] = useState('user');
+    const { setRole: setContextRole, setIsSignin } = useAuth();
+    const navigate = useNavigate();
 
     const handleSignup = async (e) => {
         e.preventDefault();
-        setRole(role);
+        
         try {
             const response = await api.post(`/${role}/signup`, {
                 username,
-            password,
-            email,
-            phone,
-            role,
-        });
-        if(response.status === 200){
-            alert('Signup successful');
-        //redirect to signin page
-        window.location.href = '/signin';
-        }else{
-            alert('Signup failed');
-        }
-        
+                password,
+                email,
+                phone,
+                role,
+            });
+            if(response.status === 200){
+                alert('Signup successful');
+                setContextRole(role);
+                setIsSignin(true);
+                navigate('/signin');
+            } else {
+                alert('Signup failed');
+            }
         } catch (error) {
             console.error(error);
         }
@@ -57,7 +58,7 @@ export default function Signup() {
                         Password
                     </label>
                     <input
-                        className="shadow appearance-none border border-red rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
+                        className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 mb-3 leading-tight focus:outline-none focus:shadow-outline"
                         id="password"
                         type="password"
                         placeholder="******************"
@@ -99,7 +100,7 @@ export default function Signup() {
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
                         id="role"
                         value={role}
-                        onChange={(e) => setrole(e.target.value)}
+                        onChange={(e) => setRole(e.target.value)}
                     >
                         <option value="user">User</option>
                         <option value="admin">Admin</option>

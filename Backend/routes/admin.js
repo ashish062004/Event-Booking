@@ -53,34 +53,41 @@ router.post('/signin', async (req, res) => {
 });
 
 
-//create event
 router.post('/events', AdminMiddleware, async (req, res) => {
     const { title, description, address, imageLink, price, duration, date, sponsor } = req.body;
-    const creatorUsername = req.username; 
-    const creator = await Admin.findOne({ username: creatorUsername });
+    const creatorUsername = req.username;
 
-    if (!creator) {
-        return res.status(404).json({ message: "Creator not found" });
+    try {
+        const creator = await Admin.findOne({ username: creatorUsername });
+
+        if (!creator) {
+            return res.status(404).json({ message: "Creator not found" });
+        }
+
+        // Create the event
+        const event = await Event.create({
+            title: title,
+            description: description,
+            address: address,
+            imageLink: imageLink,
+            price: price,
+            duration: duration,
+            date: date,
+            sponsor: sponsor,
+            creator: creator._id
+        });
+
+        // Add the event to the creator's createdEvents array
+        creator.createdEvents.push(event._id);
+        await creator.save();
+
+        res.json({
+            message: 'Event created successfully'
+        });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Internal Server Error' });
     }
-
-    await Event.create({
-        title: title,
-        description: description,
-        address: address,
-        imageLink: imageLink,
-        price: price,
-        duration: duration,
-        date: date,
-        sponsor: sponsor,
-        creator: creator._id
-    });
-
-    // Add the event to the creator's createdEvents array
-    creator.createdEvents.push(eventId);
-    await creator.save();
-    res.json({
-        message: 'Event created successfully'
-    });
 });
 
 //update pericular event
