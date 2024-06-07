@@ -1,19 +1,13 @@
-const {Router} = require('express');
-const router = Router();
-const {Event} = require('../db');
+const express = require('express');
+const router = express.Router();
+const { getAllEvents } = require('../controllers/event/getAllEventController.js');
+const { getEventById } = require('../controllers/event/getEventByIdController.js');
+
 
 // Get all events
-router.get('/', async (req, res) => {
-    // Get all events
-    const events = await Event.find({});
-    res.json(events);
-});
+router.get('/', getAllEvents);
 
 // Get event by ID
-router.get('/:id', async (req, res) => {
-    // Get event by ID
-    const event = await Event.findById(req.params.id);
-    res.json(event);
-});
+router.get('/:id', getEventById);
 
 module.exports = router;

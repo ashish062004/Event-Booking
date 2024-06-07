@@ -1,26 +1,35 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-
-// Mock API service for demonstration purposes
-const api = {
-  bookEvent: (eventId) => new Promise((resolve, reject) => {
-    setTimeout(() => {
-      resolve(`Successfully booked event with ID: ${eventId}`);
-    }, 1000);
-  }),
-};
+import { api } from '../../api';
 
 export default function EventCard({ event }) {
+    
     const handleBookNow = async () => {
         try {
-            const bookingMessage = await api.bookEvent(event._id);
-            console.log(bookingMessage);
-            alert('Booking successful Check console for details.');
+            //conform booking
+            if(!window.confirm('Are you sure you want to book this event?')) 
+                return;
+            const response = await api.post(`/user/book/${event._id}`);
+            alert(response.data.message);
+
+            if (response.data.message === 'Event booked successfully') {
+                const ticketId = response.data.ticketId;
+                const ticketResponse = await api.get(`/user/ticket/${ticketId}`, { responseType: 'blob' });
+                const blob = new Blob([ticketResponse.data], { type: 'image/png' });
+                const url = URL.createObjectURL(blob);
+                const link = document.createElement('a');
+                link.href = url;
+                link.setAttribute('download', 'ticket.png');
+                document.body.appendChild(link);
+                link.click();
+                link.remove();
+            }
         } catch (error) {
-            console.error('Failed to book event:', error);
-            alert('Booking failed. Please try again.');
+            console.error(error);
+            alert('Failed to book the event. Please try again later.');
         }
     };
+      
 
     return (
         <div className="w-full md:w-1/2 lg:w-1/3 p-4 bg-white shadow-md rounded-lg">
