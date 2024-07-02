@@ -3,18 +3,26 @@ const JWT_SECRET = process.env.JWT_SECRET;
 const jwt = require("jsonwebtoken");
 
 function UserMiddleware(req, res, next) {
-    const token = req.headers.authorization;
-    const words = token.split(" ");
-    const jwtToken = words[1];
-    const decodedValue = jwt.verify(jwtToken, JWT_SECRET);
+    if (!req.headers.authorization) {
+        return res.status(401).json({ msg: "Authorization token is missing" });
+    }
 
-    if (decodedValue.username) {    
-        req.username = decodedValue.username;
-        next();
-    } else {
-        res.status(403).json({
-            msg: "You are not authenticated"
-        })
+    const tokenParts = req.headers.authorization.split(" ");
+    if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+        return res.status(401).json({ msg: "Authorization token format is invalid" });
+    }
+
+    const jwtToken = tokenParts[1];
+    try {
+        const decodedValue = jwt.verify(jwtToken, JWT_SECRET);
+        if (decodedValue.username) {
+            req.username = decodedValue.username;
+            next();
+        } else {
+            return res.status(403).json({ msg: "You are not authenticated" });
+        }
+    } catch (e) {
+        return res.status(401).json({ msg: "Invalid or expired token" });
     }
 }
 

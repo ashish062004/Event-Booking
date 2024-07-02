@@ -1,34 +1,66 @@
-//admin can create event
+// Import necessary hooks and api
 import React, { useState } from 'react';
 import { api } from '../../api';
-import { useNavigate } from 'react-router-dom'; 
+import { useNavigate } from 'react-router-dom';
+
+
 
 export default function CreateEvent() {
-    
+    const [inputKey, setInputKey] = useState(Date.now());
     const [event, setEvent] = useState({
         title: '',
         description: '',
         address: '',
-        imageLink: '',
+        image: null, // Changed to null for file
         price: '',
         duration: '',
         date: '',
         sponsor: '',
     });
-    
+
     const navigate = useNavigate();
 
     const handleChange = (e) => {
-        setEvent({ ...event, [e.target.name]: e.target.value });
+        const { name, type, value, files } = e.target;
+        if (type === 'file') {
+            setEvent({ ...event, [name]: files[0] }); // Handle file separately
+        } else {
+            setEvent({ ...event, [name]: value });
+        }
     };
+
+    const resetForm = () => {
+        setEvent({
+            title: '',
+            description: '',
+            address: '',
+            image: null,
+            price: '',
+            duration: '',
+            date: '',
+            sponsor: '',
+        });
+        setInputKey(Date.now());
+    };
+
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        const formData = new FormData();
+        // Append each event property to formData
+        Object.keys(event).forEach(key => {
+            formData.append(key, event[key]);
+        });
+
         try {
-            const response = await api.post('/admin/events', event);
+            const response = await api.post('/admin/events', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data', // Important for files
+                },
+            });
             if (response.status === 200) {
                 alert('Event created successfully');
-                navigate('/events'); 
+                navigate('/events');
             } else {
                 alert('Event creation failed');
             }
@@ -83,16 +115,16 @@ export default function CreateEvent() {
                     />
                 </div>
                 <div className="mb-4">
-                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="imageLink">
-                        Image Link
+                    <label className="block text-gray-700 text-sm font-bold mb-2" htmlFor="image">
+                        Image
                     </label>
                     <input
                         className="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
-                        id="imageLink"
-                        type="text"
-                        placeholder="Image Link"
-                        name="imageLink"
-                        value={event.imageLink}
+                        id="image"
+                        type="file"
+                        accept="image/png, image/jpeg, image/jpg"
+                        placeholder="Image"
+                        name="image"
                         onChange={handleChange}
                     />
                 </div>

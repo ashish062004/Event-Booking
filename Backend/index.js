@@ -8,11 +8,13 @@ const adminRouter = require("./routes/admin")
 const userRouter = require("./routes/user");
 const eventRouter = require("./routes/event");
 
-// Middleware for parsing request bodies
-app.use(bodyParser.json());
-
 app.use(cors());
 app.use(express.json());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
+app.use('/uploads', express.static('uploads'));
+
+
 
 app.use("/admin", adminRouter)
 app.use("/user", userRouter)

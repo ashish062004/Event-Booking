@@ -4,6 +4,10 @@ import { api } from '../../api';
 
 export default function EventCard({ event }) {
     
+    const backendUrl ='http://localhost:3000';
+    let imageURL = `${backendUrl}/${event.image.replace(/\\/g, '/')}`;
+    console.log("imageURL ",imageURL);
+
     const handleBookNow = async () => {
         try {
             //conform booking
@@ -36,18 +40,18 @@ export default function EventCard({ event }) {
             <div className="overflow-hidden">
                 <Link to={`/event/${event._id}`}>
                     <img
-                        src={event.imageLink}
+                        src={imageURL}
                         alt={event.title}
                         className="w-full h-48 object-cover object-center"
                     />
                 </Link>
                 <div className="p-4">
                     <Link to={`/event/${event._id}`}>
-                        <h2 className="font-semibold text-lg text-black mb-2">{event.title}</h2>
+                        <h2 className="font-semibold text-lg text-black mb-2"><b>{event.title}</b></h2>
                     </Link>
-                    <p className="text-gray-700">{event.date}</p>
-                    <p className="text-gray-700">{event.address}</p>
-                    <p className="text-gray-700">Price: {event.price}</p>
+                    <p className="text-gray-700"><b>Date:</b> {new Date(event.date).toLocaleDateString()}</p>
+                    <p className="text-gray-700"><b>Address:</b> {event.address}</p>
+                    <p className="text-gray-700"><b>Price:</b> {event.price}</p>
                 </div>
                 <div className="flex justify-end mt-4">
                     <Link

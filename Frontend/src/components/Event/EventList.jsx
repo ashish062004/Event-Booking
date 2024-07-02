@@ -14,6 +14,7 @@ export default function EventList() {
             try {
                 const response = await api.get('/event');
                 setEvents(response.data);
+                console.log("Events: ", response.data);
             } catch (err) {
                 console.error(err);
                 setError("Failed to load events."); // Set error message
