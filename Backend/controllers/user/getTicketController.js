@@ -21,7 +21,7 @@ exports.getTicket = async (req, res) => {
             return res.status(404).json({ message: "Event not found" });
         }
 
-        const canvas = createCanvas(700, 200);
+        const canvas = createCanvas(800, 300);
         const ctx = canvas.getContext('2d');
 
         ctx.fillStyle = 'white';
